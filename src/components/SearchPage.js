@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator,
 
 import debonce from 'lodash.debounce'
 
-import { fetchData, setSelectedImage } from '../actions'
+import { fetchData, setSelectedImage, setNextPage } from '../actions'
 
 
 class SearchPage extends React.Component {
@@ -17,7 +17,8 @@ class SearchPage extends React.Component {
 
 
   tagChangedHandler = (val) => {
-    this.props.fetchData(val)
+    this.search = val
+    this.props.fetchData(val, this.props.appData.page, true)
   }
 
 
@@ -40,19 +41,29 @@ class SearchPage extends React.Component {
         <FlatList
           data={this.props.appData.images}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={(i) => {
-              this.props.setSelectedImage(item)
+            <TouchableOpacity
+              style={{ marginBottom: 5 }}
+              onPress={(i) => {
+                this.props.setSelectedImage(item)
 
-              this.props.navigator.push({
-                screen: 'flickrFinder.SearchResult',
-                title: 'Details'
-              })
-            }}>
+                this.props.navigator.push({
+                  screen: 'flickrFinder.SearchResult',
+                  title: 'Details'
+                })
+              }}>
               <Image source={{uri: item}} style={styles.image} />
             </TouchableOpacity>
           )}
           numColumns={3}
-          keyExtractor={({item}) => item}
+          keyExtractor={(item) => item}
+          onEndReached={() => {
+            this.props.setNextPage()
+
+            if (this.props.appData.page >= 1) {
+              this.props.fetchData(this.search, this.props.appData.page, false)
+            }
+          }}
+          onEndReachedThreshold={0.5}
         />
       </View>
     )
@@ -95,8 +106,9 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchData: (tags) => dispatch(fetchData(tags)),
-    setSelectedImage: (i) => dispatch(setSelectedImage(i))
+    fetchData: (tags, page, isNewFetch) => dispatch(fetchData(tags, page, isNewFetch)),
+    setSelectedImage: (i) => dispatch(setSelectedImage(i)),
+    setNextPage: () => dispatch(setNextPage())
   }
 }
 

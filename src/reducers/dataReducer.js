@@ -1,4 +1,4 @@
-import { FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE, SET_SELECTED_IMAGE } from '../constants'
+import { FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE, SET_SELECTED_IMAGE, NEXT_PAGE } from '../constants'
 import initialState from './initialState'
 
 
@@ -7,15 +7,15 @@ export default function dataReducer (state = initialState, action) {
     case FETCHING_DATA:
       return {
         ...state,
-        images: [],
+        images: action.isNewFetch ? [] : state.images,
         isFetching: true
       }
 
     case FETCHING_DATA_SUCCESS:
-      let images = []
+      let images = [...state.images]
       if (action.data.photos && action.data.photos.photo.length > 0) {
         action.data.photos.photo.forEach(photo => {
-          images.push(`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_h_d.jpg`)
+          images.push(`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_t.jpg`)
         })
       }
       return {
@@ -35,6 +35,12 @@ export default function dataReducer (state = initialState, action) {
       return {
         ...state,
         selected: action.source
+      }
+
+    case NEXT_PAGE:
+      return {
+        ...state,
+        page: state.page + 1
       }
 
     default:
