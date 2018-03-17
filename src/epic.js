@@ -4,11 +4,11 @@ import { getDataSuccess, getDataFailure } from './actions'
 import 'rxjs'
 import { Observable } from 'rxjs/Observable'
 
-import { API_KEY } from './constants'
+import { API_KEY, IMAGES_REP_PAGE } from './constants'
 
 
 const getData = (tags, page) => {
-  return fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${API_KEY}&tags=${tags}&per_page=50&page=${page}&format=json&nojsoncallback=1`).then(resp => resp.json())
+  return fetch(`https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${API_KEY}&tags=${tags}&per_page=${IMAGES_REP_PAGE}&page=${page}&format=json&nojsoncallback=1`).then(resp => resp.json())
 }
 
 

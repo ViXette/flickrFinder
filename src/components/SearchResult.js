@@ -1,14 +1,32 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, Text, Dimensions, ActivityIndicator } from 'react-native'
+
+
+const { width } = Dimensions.get('window')
 
 
 class SearchResult extends React.Component {
 
+  state = {
+    isFetching: true
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Image source={{uri: this.props.appData.selected}} style={styles.image} />
+        <Text style={styles.title}>{this.props.appData.selected.title}</Text>
+        {this.state.isFetching && (
+          <View style={[styles.loader]}>
+            <ActivityIndicator size="large" color="#333" />
+          </View>
+        )}
+        <Image
+          source={{uri: this.props.appData.selected.large}}
+          style={styles.image}
+          resizeMode="cover"
+          onLoadEnd={() => {this.setState({ isFetching: false })}}
+        />
       </View>
     )
   }
@@ -22,11 +40,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 20,
+    marginVertical: 10,
+  },
+  title: {
+    marginBottom: 10,
+    alignItems: 'center',
+    fontWeight: 'bold'
   },
   image: {
-    marginRight: 8,
-    height: 200,
-    width: 200
+    height: '100%',
+    width: width * 0.95
+  },
+  loader: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
   },
 })
 
@@ -37,12 +71,8 @@ function mapStateToProps (state) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {}
-}
-
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {}
 )(SearchResult)
