@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, View, Image, Text, Dimensions, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Image, Text, Dimensions, ActivityIndicator, BackHandler } from 'react-native'
 
 
 const { width } = Dimensions.get('window')
@@ -11,6 +11,25 @@ class SearchResult extends React.Component {
   state = {
     isFetching: true
   }
+
+
+  componentDidMount () {
+    let self = this
+    BackHandler.addEventListener('hardwareBackPress', function () {
+       ; console.log('Navigator', self.props)  // TODO Remove
+      self.props.navigator.pop({
+        animated: true,
+      })
+
+      return true
+    })
+  }
+
+
+  componentWillUnmount () {
+    BackHandler.removeEventListener('hardwareBackPress')
+  }
+
 
   render() {
     return (

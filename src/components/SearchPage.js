@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, Image, FlatList, Platform } from 'react-native'
 import * as Progress from 'react-native-progress'
 
 import debonce from 'lodash.debounce'
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 5,
     borderColor: '#CCC',
-    borderWidth: 1,
+    borderWidth: Platform.OS === 'ios' ? 1 : 0,
     fontSize: 18,
   },
   loader: {
