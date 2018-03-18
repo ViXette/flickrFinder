@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
+    "prop-types": "^15.6.1",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-native-navigation": "^1.1.407",

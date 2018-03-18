@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ActivityIndicator, Image, FlatList, Platform } from 'react-native'
 import * as Progress from 'react-native-progress'
 
@@ -88,6 +89,14 @@ class SearchPage extends React.Component {
 }
 
 
+SearchPage.propTypes = {
+  fetchData: PropTypes.func.isRequired,
+  setSelectedImage: PropTypes.func.isRequired,
+  setNextPage: PropTypes.func.isRequired,
+  incTotalDownloadedImages: PropTypes.func.isRequired,
+}
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -131,17 +140,7 @@ function mapStateToProps (state) {
 }
 
 
-function mapDispatchToProps (dispatch) {
-  return {
-    fetchData: (tags, page, isNewFetch) => dispatch(fetchData(tags, page, isNewFetch)),
-    setSelectedImage: (i) => dispatch(setSelectedImage(i)),
-    setNextPage: () => dispatch(setNextPage()),
-    incTotalDownloadedImages: () => dispatch(incTotalDownloadedImages()),
-  }
-}
-
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { fetchData, setSelectedImage, setNextPage, incTotalDownloadedImages }
 )(SearchPage)
